@@ -1,4 +1,5 @@
 #ifndef _WIN32
+#ifndef __EMSCRIPTEN__
 
 #include <errno.h>
 #include <sys/time.h>
@@ -81,4 +82,5 @@ void Timer::set(const Timestamp& timestamp) {
   this->cond.signal();
 }
 
+#endif // __EMSCRIPTEN__
 #endif // _WIN32

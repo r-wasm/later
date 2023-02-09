@@ -4,6 +4,7 @@ echo "Running configure script"
 
 # Find compiler
 CC=`"${R_HOME}"/bin/R CMD config CC`
+MAKEVARS="Makevars.in"
 
 # Detect whether -latomic is needed during linking. This is needed on some
 # platforms, notably ARM (Raspberry Pi).
@@ -25,11 +26,16 @@ case "$CC" in
     echo "Found UBSAN. Will skip tests that raise false positives."
     PKG_CPPFLAGS="$PKG_CPPFLAGS -DUSING_UBSAN"
     ;;
+  *emcc*)
+    echo "Found Emscripten, using Makevars.em template."
+    EXTRA_PKG_LIBS=
+    MAKEVARS="Makevars.em"
+    ;;
 esac
 
 # Write to Makevars
 sed -e "s|@extra_pkg_libs@|$EXTRA_PKG_LIBS|" -e "s|@pkg_cppflags@|$PKG_CPPFLAGS|" \
-    src/Makevars.in > src/Makevars
+    src/$MAKEVARS > src/Makevars
 
 # Success
 exit 0

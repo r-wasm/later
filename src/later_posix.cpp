@@ -8,9 +8,14 @@
 
 #include "later.h"
 #include "callback_registry.h"
-#include "timer_posix.h"
 #include "threadutils.h"
 #include "debug.h"
+
+#ifdef __EMSCRIPTEN__
+#include "timer_em.h"
+#else
+#include "timer_posix.h"
+#endif
 
 using namespace Rcpp;
 
